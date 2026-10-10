@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dawit AI</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #101827;
+      color: white;
+      margin: 0;
+      padding: 20px;
+    }
+    main {
+      max-width: 600px;
+      margin: 30px auto;
+    }
+    h1 { color: #60a5fa; }
+    #chat {
+      background: #1e293b;
+      border-radius: 12px;
+      padding: 15px;
+      min-height: 250px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    input, button {
+      box-sizing: border-box;
+      padding: 13px;
+      border-radius: 8px;
+      border: 0;
+      margin-top: 10px;
+    }
+    input { width: 70%; }
+    button {
+      background: #2563eb;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>🤖 Dawit AI</h1>
+    <p>Your AI assistant</p>
+    <div id="chat">Welcome! Ask Dawit AI a question.</div>
+    <form id="form">
+      <input id="message" placeholder="Type your message..." required>
+      <button type="submit">Send</button>
+    </form>
+  </main>
+  <script>
+    const form = document.getElementById("form");
+    const input = document.getElementById("message");
+    const chat = document.getElementById("chat");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const message = input.value.trim();
+      if (!message) return;
+
+      chat.textContent += "\n\nYou: " + message;
+      input.value = "";
+      chat.textContent += "\nDawit AI: Thinking...";
+
+      try {
+        const response = await fetch("/.netlify/functions/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message })
+        });
+        const data = await response.json();
+        chat.textContent = chat.textContent.replace(
+          "Dawit AI: Thinking...",
+          "Dawit AI: " + (data.reply || data.error || "No reply")
+        );
+      } catch (error) {
+        chat.textContent += "\nConnection error. Please try again.";
+      }
+    });
+  </script>
+</body>
+</html>
