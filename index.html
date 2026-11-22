@@ -3,25 +3,469 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#101827">
-<title>DAWIT SMART LIFE</title>
+<meta name="theme-color" content="#0b1020">
+<title>DAWIT AI</title>
 <style>
+:root{--bg:#0b1020;--panel:#131e33;--panel2:#192943;--blue:#3979f6;--text:#f1f5f9;--muted:#9eacc3;--border:#293b59}
 *{box-sizing:border-box}
-body{margin:0;background:#0b1220;color:#f1f5f9;font-family:Arial,sans-serif}
-header{padding:22px 15px;text-align:center;background:#111e35;border-bottom:1px solid #263957}
-header h1{margin:0;color:#60a5fa;font-size:25px}
-header p{color:#cbd5e1}
-nav{display:flex;gap:8px;overflow-x:auto;padding:12px;background:#111827;position:sticky;top:0;z-index:5}
-nav button{white-space:nowrap;background:#263957;color:white;border:0;padding:12px;border-radius:9px}
-main{max-width:800px;margin:auto;padding:15px}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
+header{background:#101b30;padding:18px 15px;text-align:center;border-bottom:1px solid var(--border)}
+header h1{margin:0;color:#72a7ff;font-size:27px}
+header p{margin:7px 0 0;color:var(--muted);font-size:13px}
+nav{display:flex;gap:7px;padding:10px;background:#101827;overflow-x:auto;position:sticky;top:0;z-index:10}
+nav button{flex-shrink:0;background:#223451;color:white;border:0;border-radius:9px;padding:11px 13px}
+nav button.active{background:var(--blue)}
+main{max-width:850px;margin:auto;padding:14px}
 .page{display:none}.page.active{display:block}
-.card{background:#17243a;border:1px solid #293b59;padding:17px;border-radius:14px;margin-bottom:15px}
-h2{color:#60a5fa;margin-top:0}
-input,textarea,select{width:100%;padding:13px;margin:8px 0;border:1px solid #344968;border-radius:9px;background:#0d1729;color:white;font-size:16px}
+.card{background:var(--panel);border:1px solid var(--border);padding:17px;border-radius:15px;margin-bottom:14px}
+h2{color:#78aaff;margin:0 0 13px;font-size:21px}
+h3{font-size:16px}
+p{line-height:1.6}
+.muted{color:var(--muted);font-size:13px}
+input,textarea,select{width:100%;padding:13px;margin:7px 0;border:1px solid #344968;border-radius:9px;background:#0d1729;color:white;font-size:16px}
 textarea{min-height:110px;resize:vertical}
-button.action{background:#2563eb;color:white;border:0;padding:13px 17px;border-radius:9px;margin:5px 3px;cursor:pointer}
+button.action{background:var(--blue);color:white;border:0;padding:12px 16px;border-radius:9px;margin:5px 3px;cursor:pointer;font-size:14px}
+button.secondary{background:#34445f}
 button:disabled{opacity:.5}
-#messages{min-height:220px;max-height:380px;overflow:auto;background:#0d1729;padding:12px;border-radius:10px;white-space:pre-wrap;overflow-wrap:anywhere}
-.msg{padding:11px;margin:8px 0;border-radius:9px;white-space:pre-wrap;overflow-wrap:anywhere}
-.user{background:#233d65}.ai{background:#26364b}
-.result{background
+#messages{min-height:240px;max-height:420px;overflow:auto;background:#0d1729;padding:12px;border-radius:10px;white-space:pre-wrap;overflow-wrap:anywhere}
+.msg{padding:12px;margin:9px 0;border-radius:10px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.6}
+.user{background:#233d65}
+.ai{background:#26364b}
+.row{display:flex;gap:7px;align-items:center}
+.row input{flex:1;min-width:0}
+.row button{flex-shrink:0}
+.result{background:#0d1729;border:1px solid var(--border);padding:13px;border-radius:9px;white-space:pre-wrap;overflow-wrap:anywhere;min-height:45px;margin-top:10px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tool{background:var(--panel2);border:1px solid var(--border);padding:15px;border-radius:12px;text-align:left;color:white;cursor:pointer}
+.tool b{display:block;color:#8bb5ff;margin-bottom:6px}
+footer{text-align:center;padding:25px;color:var(--muted);font-size:12px}
+a{color:#8bb5ff}
+@media(min-width:650px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+
+<header>
+<h1>✦ DAWIT AI</h1>
+<p>Your Smart AI Assistant · የእርስዎ ዘመናዊ AI ረዳት</p>
+</header>
+
+<nav id="nav">
+<button class="active" data-page="home">Home</button>
+<button data-page="chat">AI Chat</button>
+<button data-page="translator">Translator</button>
+<button data-page="voice">Voice</button>
+<button data-page="photo">AI Photo</button>
+<button data-page="video">AI Video</button>
+<button data-page="script">Video Script</button>
+<button data-page="pdf">PDF Reader</button>
+<button data-page="tools">Smart Tools</button>
+<button data-page="learn">Learn English</button>
+</nav>
+
+<main>
+
+<section class="page active" id="home">
+<div class="card">
+<h2>Welcome to DAWIT AI 👋</h2>
+<p>ሰላም! ወደ DAWIT AI እንኳን በደህና መጡ።</p>
+<p class="muted">Chat, Translate, Create, Learn and Explore.</p>
+<button class="action" onclick="showPage('chat')">Start AI Chat</button>
+</div>
+<div class="card">
+<h2>AI Tools</h2>
+<div class="grid">
+<button class="tool" onclick="showPage('chat')"><b>💬 AI Chat</b>ጥያቄዎችን ጠይቅ</button>
+<button class="tool" onclick="showPage('translator')"><b>🌐 Translator</b>ቋንቋ ተርጉም</button>
+<button class="tool" onclick="showPage('voice')"><b>🎙 Voice</b>በድምፅ ተጠቀም</button>
+<button class="tool" onclick="showPage('photo')"><b>🎨 AI Photo</b>ፎቶ ፍጠር</button>
+<button class="tool" onclick="showPage('video')"><b>🎬 AI Video</b>ቪዲዮ ፍጠር</button>
+<button class="tool" onclick="showPage('script')"><b>📝 Video Script</b>የቪዲዮ ጽሑፍ</button>
+<button class="tool" onclick="showPage('pdf')"><b>📄 PDF Reader</b>PDF አንብብ</button>
+<button class="tool" onclick="showPage('tools')"><b>🧰 Smart Tools</b>ተጨማሪ መሳሪያዎች</button>
+<button class="tool" onclick="showPage('learn')"><b>📚 Learn English</b>እንግሊዝኛ ተማር</button>
+</div>
+</div>
+</section>
+
+<section class="page" id="chat">
+<div class="card">
+<h2>💬 DAWIT AI Chat</h2>
+<p class="muted">Ask anything. በአማርኛም ሆነ በEnglish መጠየቅ ትችላለህ።</p>
+<div id="messages"><div class="msg ai">ሰላም! እኔ DAWIT AI ነኝ። ምን ልርዳህ?</div></div>
+<div class="row">
+<input id="chatInput" placeholder="ጥያቄህን እዚህ ጻፍ..." onkeydown="if(event.key==='Enter')sendChat()">
+<button class="action" onclick="sendChat()">Send</button>
+</div>
+<button class="action secondary" onclick="clearChat()">Clear Chat</button>
+</div>
+</section>
+
+<section class="page" id="translator">
+<div class="card">
+<h2>🌐 AI Translator</h2>
+<select id="transLang">
+<option value="Translate into Amharic">English → Amharic</option>
+<option value="Translate into English">Amharic → English</option>
+<option value="Translate into Arabic">Translate to Arabic</option>
+<option value="Translate into French">Translate to French</option>
+<option value="Translate into Afaan Oromo">Translate to Afaan Oromo</option>
+</select>
+<textarea id="transText" placeholder="የሚተረጎመውን ጽሑፍ እዚህ ጻፍ..."></textarea>
+<button class="action" onclick="translateText()">Translate</button>
+<div class="result" id="transResult">Translation will appear here.</div>
+<button class="action secondary" onclick="speakText('transResult')">🔊 Read aloud</button>
+</div>
+</section>
+
+<section class="page" id="voice">
+<div class="card">
+<h2>🎙 Voice Assistant</h2>
+<p>በማይክሮፎን ተናገር፤ የሚናገርህን ጽሑፍ ወደ AI Chat መላክ ትችላለህ።</p>
+<button class="action" onclick="startVoice()">🎙 Start Speaking</button>
+<div class="result" id="voiceResult">Your speech will appear here.</div>
+<button class="action" onclick="voiceToChat()">Send to AI Chat</button>
+<button class="action secondary" onclick="speakText('voiceResult')">🔊 Read aloud</button>
+</div>
+</section>
+
+<section class="page" id="photo">
+<div class="card">
+<h2>🎨 AI Photo Studio</h2>
+<p class="muted">የሚፈልጉትን ፎቶ በጽሑፍ ይግለጹ። ይህ ባህሪ የImage API ግንኙነት ይፈልጋል።</p>
+<textarea id="photoPrompt" placeholder="Describe the image you want to create..."></textarea>
+<select id="photoSize">
+<option value="square">Square</option>
+<option value="portrait">Portrait</option>
+<option value="landscape">Landscape</option>
+</select>
+<button class="action" onclick="generatePhoto()">Generate Photo</button>
+<div class="result" id="photoResult">Photo result will appear here.</div>
+</div>
+</section>
+
+<section class="page" id="video">
+<div class="card">
+<h2>🎬 AI Video Studio</h2>
+<p class="muted">የቪዲዮውን ሀሳብ ጻፍ። Video generation backend ካለ ይሰራል።</p>
+<textarea id="videoPrompt" placeholder="Describe your video..."></textarea>
+<select id="videoDuration">
+<option value="5">5 seconds</option>
+<option value="6">6 seconds</option>
+<option value="8">8 seconds</option>
+<option value="10">10 seconds</option>
+</select>
+<select id="videoRatio">
+<option value="9:16">Vertical 9:16</option>
+<option value="16:9">Landscape 16:9</option>
+<option value="1:1">Square 1:1</option>
+</select>
+<button class="action" onclick="generateVideo()">Generate Video</button>
+<div class="result" id="videoResult">Video result will appear here.</div>
+</div>
+</section>
+
+<section class="page" id="script">
+<div class="card">
+<h2>📝 Video Script Generator</h2>
+<textarea id="scriptTopic" placeholder="Enter your video topic..."></textarea>
+<select id="scriptLang">
+<option>Amharic</option>
+<option>English</option>
+<option>Arabic</option>
+<option>Afaan Oromo</option>
+<option>French</option>
+</select>
+<select id="scriptType">
+<option>YouTube Shorts</option>
+<option>TikTok Video</option>
+<option>YouTube Long Video</option>
+<option>Educational Video</option>
+<option>Funny Video</option>
+</select>
+<button class="action" onclick="makeScript()">Create Script</button>
+<div class="result" id="scriptResult">Your script will appear here.</div>
+<button class="action secondary" onclick="copyResult('scriptResult')">Copy Script</button>
+</div>
+</section>
+
+<section class="page" id="pdf">
+<div class="card">
+<h2>📄 PDF Reader</h2>
+<p class="muted">PDF ፋይል ምረጥ፤ ጽሑፉን እናነባለን።</p>
+<input type="file" id="pdfFile" accept="application/pdf">
+<button class="action" onclick="readPDF()">Read PDF</button>
+<div class="result" id="pdfResult">PDF text will appear here.</div>
+</div>
+</section>
+
+<section class="page" id="tools">
+<div class="card">
+<h2>🧮 Calculator</h2>
+<input id="calcInput" placeholder="Example: 25*4+10">
+<button class="action" onclick="calculate()">Calculate</button>
+<div class="result" id="calcResult"></div>
+</div>
+<div class="card">
+<h2>🔳 QR Code Maker</h2>
+<input id="qrInput" placeholder="Enter text or website link">
+<button class="action" onclick="makeQR()">Create QR Code</button>
+<div class="result" id="qrResult"></div>
+</div>
+<div class="card">
+<h2>🔐 Password Generator</h2>
+<select id="passLength">
+<option value="8">8 characters</option>
+<option value="12" selected>12 characters</option>
+<option value="16">16 characters</option>
+<option value="24">24 characters</option>
+</select>
+<button class="action" onclick="makePassword()">Generate Password</button>
+<div class="result" id="passResult"></div>
+<button class="action secondary" onclick="copyResult('passResult')">Copy Password</button>
+</div>
+<div class="card">
+<h2>📒 My Notes</h2>
+<textarea id="notes" placeholder="Write your notes here..."></textarea>
+<button class="action" onclick="saveNotes()">Save Notes</button>
+<button class="action secondary" onclick="loadNotes()">Load Notes</button>
+<p id="noteStatus" class="muted"></p>
+</div>
+</section>
+
+<section class="page" id="learn">
+<div class="card">
+<h2>📚 Learn English</h2>
+<p>Practice English every day!</p>
+<div class="result">
+Hello = ሰላም
+<br><br>How are you? = እንዴት ነህ?
+<br><br>Thank you = አመሰግናለሁ
+<br><br>Good morning = እንደምን አደርክ
+<br><br>I am learning English = እንግሊዝኛ እየተማርኩ ነው
+<br><br>What is your name? = ስምህ ማን ነው?
+</div>
+<button class="action" onclick="speakText('learn')">🔊 Read aloud</button>
+</div>
+<div class="card">
+<h2>✍️ Practice</h2>
+<input id="practiceInput" placeholder="Write an English sentence...">
+<button class="action" onclick="checkEnglish()">Check with AI</button>
+<div class="result" id="practiceResult"></div>
+</div>
+</section>
+
+</main>
+<footer>DAWIT AI · Your Smart AI Assistant</footer>
+
+<script>
+const $=id=>document.getElementById(id);
+
+function showPage(id){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ $(id).classList.add('active');
+ document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+ window.scrollTo(0,0);
+}
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+
+function addMessage(text,who){
+ const d=document.createElement('div');
+ d.className='msg '+who;
+ d.textContent=text;
+ $('messages').appendChild(d);
+ $('messages').scrollTop=$('messages').scrollHeight;
+}
+
+async function askAI(message){
+ const response=await fetch('/.netlify/functions/chat',{
+  method:'POST',
+  headers:{'Content-Type':'application/json'},
+  body:JSON.stringify({message})
+ });
+ const data=await response.json();
+ if(!response.ok)throw new Error(data.error||'AI request failed');
+ return data.reply||data.response||data.output||'No reply received.';
+}
+
+async function sendChat(){
+ const input=$('chatInput');
+ const message=input.value.trim();
+ if(!message)return;
+ input.value='';
+ addMessage('You: '+message,'user');
+ const loading=document.createElement('div');
+ loading.className='msg ai';
+ loading.textContent='DAWIT AI is thinking...';
+ $('messages').appendChild(loading);
+ try{
+  const answer=await askAI(message);
+  loading.textContent='DAWIT AI: '+answer;
+ }catch(e){
+  loading.textContent='Connection error: '+e.message;
+ }
+ $('messages').scrollTop=$('messages').scrollHeight;
+}
+function clearChat(){
+ $('messages').innerHTML='<div class="msg ai">ሰላም! ምን ልርዳህ?</div>';
+}
+
+async function translateText(){
+ const t=$('transText').value.trim();
+ if(!t)return alert('Please enter text.');
+ $('transResult').textContent='Translating...';
+ try{$('transResult').textContent=await askAI($('transLang').value+'. Keep the original meaning. Text: '+t);}
+ catch(e){$('transResult').textContent='Error: '+e.message;}
+}
+
+function startVoice(){
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SR){$('voiceResult').textContent='Speech recognition is not supported in this browser.';return;}
+ const r=new SR();
+ r.lang='am-ET';
+ r.interimResults=false;
+ r.onresult=e=>$('voiceResult').textContent=e.results[0][0].transcript;
+ r.onerror=()=> $('voiceResult').textContent='Microphone error. Check browser permission and internet.';
+ r.start();
+}
+function voiceToChat(){
+ const t=$('voiceResult').textContent;
+ if(!t||t.includes('will appear'))return;
+ $('chatInput').value=t;
+ showPage('chat');
+}
+function speakText(id){
+ const el=$(id);
+ const text=el.innerText||el.textContent;
+ if(!('speechSynthesis'in window))return alert('Speech is not supported.');
+ speechSynthesis.cancel();
+ const u=new SpeechSynthesisUtterance(text);
+ u.lang='am-ET';
+ speechSynthesis.speak(u);
+}
+
+async function makeScript(){
+ const topic=$('scriptTopic').value.trim();
+ if(!topic)return alert('Enter a topic.');
+ $('scriptResult').textContent='Creating script...';
+ try{
+  $('scriptResult').textContent=await askAI('Create a complete '+$('scriptType').value+' video script in '+$('scriptLang').value+' about: '+topic+'. Include a strong hook, narration, scenes and ending.');
+ }catch(e){$('scriptResult').textContent='Error: '+e.message;}
+}
+
+async function checkEnglish(){
+ const t=$('practiceInput').value.trim();
+ if(!t)return;
+ $('practiceResult').textContent='Checking...';
+ try{$('practiceResult').textContent=await askAI('Correct this English sentence. Explain the mistakes in simple Amharic: '+t);}
+ catch(e){$('practiceResult').textContent='Error: '+e.message;}
+}
+
+async function generatePhoto(){
+ const prompt=$('photoPrompt').value.trim();
+ if(!prompt)return alert('Describe your photo first.');
+ $('photoResult').textContent='Connecting to image service...';
+ try{
+  const r=await fetch('/.netlify/functions/image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt,size:$('photoSize').value})});
+  const d=await r.json();
+  if(!r.ok)throw Error(d.error||'Image service is not configured.');
+  const url=d.url||d.imageUrl||d.image;
+  if(!url)throw Error('No image URL returned.');
+  $('photoResult').innerHTML='';
+  const img=document.createElement('img');
+  img.src=url;img.alt='Generated image';img.style.maxWidth='100%';img.style.borderRadius='10px';
+  $('photoResult').appendChild(img);
+  const a=document.createElement('a');a.href=url;a.download='dawit-ai-image.png';a.textContent='Download image';
+  $('photoResult').appendChild(document.createElement('br'));$('photoResult').appendChild(a);
+ }catch(e){$('photoResult').textContent='Image generation is not connected yet. '+e.message;}
+}
+
+async function generateVideo(){
+ const prompt=$('videoPrompt').value.trim();
+ if(!prompt)return alert('Describe your video first.');
+ $('videoResult').textContent='Connecting to video service...';
+ try{
+  const r=await fetch('/.netlify/functions/video',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt,duration:Number($('videoDuration').value),aspect_ratio:$('videoRatio').value})});
+  const d=await r.json();
+  if(!r.ok)throw Error(d.error||'Video service is not configured.');
+  const url=d.url||d.videoUrl||d.video;
+  if(!url)throw Error('No video URL returned.');
+  $('videoResult').innerHTML='';
+  const v=document.createElement('video');v.src=url;v.controls=true;v.style.width='100%';
+  $('videoResult').appendChild(v);
+  const a=document.createElement('a');a.href=url;a.download='dawit-ai-video.mp4';a.textContent='Download video';
+  $('videoResult').appendChild(document.createElement('br'));$('videoResult').appendChild(a);
+ }catch(e){$('videoResult').textContent='Video generation backend is not connected yet. '+e.message;}
+}
+
+function calculate(){
+ const s=$('calcInput').value.trim();
+ if(!s)return;
+ if(!/^[0-9+\-*/().%\s]+$/.test(s)){ $('calcResult').textContent='Invalid calculation.';return;}
+ try{
+  const result=Function('"use strict";return ('+s+')')();
+  $('calcResult').textContent=Number.isFinite(result)?String(result):'Invalid result';
+ }catch(e){$('calcResult').textContent='Check your calculation.';}
+}
+
+function makeQR(){
+ const t=$('qrInput').value.trim();
+ if(!t)return alert('Enter text or link.');
+ $('qrResult').innerHTML='';
+ const img=document.createElement('img');
+ img.alt='QR Code';img.style.maxWidth='220px';
+ img.src='https://api.qrserver.com/v1/create-qr-code/?size=220x220&data='+encodeURIComponent(t);
+ $('qrResult').appendChild(img);
+}
+function makePassword(){
+ const chars='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%&*';
+ const n=Number($('passLength').value);
+ let p='';
+ const bytes=new Uint32Array(n);crypto.getRandomValues(bytes);
+ for(let i=0;i<n;i++)p+=chars[bytes[i]%chars.length];
+ $('passResult').textContent=p;
+}
+function saveNotes(){
+ localStorage.setItem('dawitAI_notes',$('notes').value);
+ $('noteStatus').textContent='Notes saved on this device.';
+}
+function loadNotes(){
+ $('notes').value=localStorage.getItem('dawitAI_notes')||'';
+ $('noteStatus').textContent='Notes loaded.';
+}
+function copyResult(id){
+ const t=$(id).innerText;
+ if(navigator.clipboard)navigator.clipboard.writeText(t).then(()=>alert('Copied!')).catch(()=>alert('Copy failed.'));
+ else alert(t);
+}
+
+async function readPDF(){
+ const file=$('pdfFile').files[0];
+ if(!file)return alert('Choose a PDF file first.');
+ $('pdfResult').textContent='Reading PDF...';
+ try{
+  if(!window.pdfjsLib){
+   await new Promise((resolve,reject)=>{
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+    s.onload=resolve;s.onerror=reject;document.head.appendChild(s);
+   });
+  }
+  pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  const pdf=await pdfjsLib.getDocument({data:await file.arrayBuffer()}).promise;
+  let text='';
+  const limit=Math.min(pdf.numPages,20);
+  for(let i=1;i<=limit;i++){
+   const page=await pdf.getPage(i);
+   const content=await page.getTextContent();
+   text+='\n\nPage '+i+'\n'+content.items.map(x=>x.str).join(' ');
+  }
+  $('pdfResult').textContent=text||'No readable text found in this PDF.';
+  if(pdf.numPages>20)$('pdfResult').textContent+='\n\nOnly the first 20 pages are shown.';
+ }catch(e){$('pdfResult').textContent='Could not read this PDF: '+e.message;}
+}
+
+loadNotes();
+</script>
+</body>
+</html>
